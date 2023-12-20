@@ -45,6 +45,7 @@ const estilos = StyleSheet.create({
 		borderBottomRightRadius: 5,
 		borderBottomLeftRadius: 28,
 		alignItems: "center",
+		overflow: "visible",
 	},
 	conteinerGrande: {
 		width: 176,

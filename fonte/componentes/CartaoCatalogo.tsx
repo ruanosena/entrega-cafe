@@ -1,17 +1,23 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, ViewProps } from "react-native";
 import { TEMA } from "../estilos/tema";
 
 import cafeImagem from "../assets/Expresso.png";
+import { Cafe } from "../dados/cafes";
+import Formatador from "../utilitarios/MoedaFormatador";
 
-export function CartaoCatalogo() {
+type Props = ViewProps & {
+	dados: Cafe;
+};
+
+export function CartaoCatalogo({ dados, ...rest }: Props) {
 	return (
-		<View style={estilos.conteiner}>
-			<Image style={estilos.imagem} source={cafeImagem} alt="Café expresso" />
+		<View style={estilos.conteiner} {...rest}>
+			<Image style={estilos.imagem} source={dados.imagem} alt="Foto do café na xícara" />
 			<View style={estilos.conteudo}>
-				<Text style={estilos.titulo}>Expresso tradicional</Text>
-				<Text style={estilos.texto}>O tradicional café feito com água quente e grãos moídos</Text>
+				<Text style={estilos.titulo}>{dados.titulo}</Text>
+				<Text style={estilos.texto}>{dados.descricao}</Text>
 				<Text style={estilos.preco}>
-					<Text style={estilos.precoAbreviacao}>R$</Text> 9,90
+					<Text style={estilos.precoAbreviacao}>R$</Text> {Formatador(dados.preco)}
 				</Text>
 			</View>
 		</View>
