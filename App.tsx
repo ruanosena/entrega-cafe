@@ -10,6 +10,8 @@ import { EntradaNumero } from "./fonte/componentes/EntradaNumero";
 import { Carregando } from "./fonte/componentes/Carregando";
 import { EntradaPesquisar } from "./fonte/componentes/EntradaPesquisar";
 import { CartaoDestaque } from "./fonte/componentes/CartaoDestaque";
+import { CartaoCatalogo } from "./fonte/componentes/CartaoCatalogo";
+import { CartaoCarrinho } from "./fonte/componentes/CartaoCarrinho";
 
 export default function App() {
 	const [fontesCarregadas] = useFonts({ Roboto_400Regular, Roboto_700Bold, Baloo2_700Bold });
@@ -31,6 +33,8 @@ export default function App() {
 				<EntradaPesquisar />
 				<CartaoDestaque tamanho="pequeno" />
 				<CartaoDestaque tamanho="grande" />
+				<CartaoCatalogo />
+				<CartaoCarrinho />
 				<StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 			</View>
 		</ScrollView>

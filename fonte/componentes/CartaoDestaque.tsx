@@ -21,7 +21,9 @@ export function CartaoDestaque({ tamanho = "pequeno" }: Props) {
 				Bebida a base de café, uísque irlandês, açúcar e chantilly
 			</Text>
 			<Text style={[estilos.preco, tamanho == "grande" && estilos.precoGrande]}>
-				<Text style={[estilos.abreviacao, tamanho == "grande" && estilos.abreviacaoGrande]}>
+				<Text
+					style={[estilos.precoAbreviacao, tamanho == "grande" && estilos.precoAbreviacaoGrande]}
+				>
 					R$
 				</Text>{" "}
 				9,90
@@ -32,7 +34,7 @@ export function CartaoDestaque({ tamanho = "pequeno" }: Props) {
 
 const estilos = StyleSheet.create({
 	conteiner: {
-		minWidth: 168,
+		width: 142,
 		padding: 16,
 		backgroundColor: TEMA.CORES.CINZA_200,
 		borderWidth: 1,
@@ -45,7 +47,12 @@ const estilos = StyleSheet.create({
 		alignItems: "center",
 	},
 	conteinerGrande: {
+		width: 176,
 		padding: 20,
+		borderTopRightRadius: 28,
+		borderTopLeftRadius: 5,
+		borderBottomRightRadius: 5,
+		borderBottomLeftRadius: 28,
 	},
 	imagem: {
 		width: 64,
@@ -95,11 +102,11 @@ const estilos = StyleSheet.create({
 	precoGrande: {
 		fontSize: 24,
 	},
-	abreviacao: {
+	precoAbreviacao: {
 		fontSize: 10,
 		fontFamily: TEMA.FONTES.TEXTO_NORMAL,
 	},
-	abreviacaoGrande: {
+	precoAbreviacaoGrande: {
 		fontSize: 12,
 	},
 });

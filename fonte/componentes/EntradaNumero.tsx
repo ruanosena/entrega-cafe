@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import { BotaoIcone } from "./BotaoIcone";
 import { useState } from "react";
+import { TEMA } from "../estilos/tema";
 
 export function EntradaNumero({ ...rest }: TextInputProps) {
 	const [valor, defValor] = useState(0);
@@ -24,6 +25,8 @@ const estilos = StyleSheet.create({
 	conteiner: {
 		flexDirection: "row",
 		alignItems: "center",
+		borderWidth: 1,
+		borderColor: TEMA.CORES.CINZA_400,
 	},
 	entrada: {
 		width: "auto",
