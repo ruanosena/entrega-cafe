@@ -10,7 +10,13 @@ type Props = TouchableOpacityProps & {
 	children?: ReactNode;
 };
 
-export function BotaoIcone({ tipo = "primario", transparente = false, icone, children, ...rest }: Props) {
+export function BotaoIcone({
+	tipo,
+	transparente = false,
+	icone,
+	children,
+	...rest
+}: Props) {
 	return (
 		<TouchableOpacity
 			style={[
@@ -28,7 +34,13 @@ export function BotaoIcone({ tipo = "primario", transparente = false, icone, chi
 				<MaterialCommunityIcons
 					name={icone}
 					size={20}
-					color={tipo == "primario" ? TEMA.CORES.ROXO : TEMA.CORES.AMARELO}
+					color={
+						tipo == "primario"
+							? TEMA.CORES.ROXO
+							: tipo == "secundario"
+							? TEMA.CORES.AMARELO
+							: TEMA.CORES.BRANCO
+					}
 				/>
 			)}
 		</TouchableOpacity>

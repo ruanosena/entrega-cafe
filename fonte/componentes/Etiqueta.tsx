@@ -4,11 +4,19 @@ import { TEMA } from "../estilos/tema";
 
 type Props = PressableProps & {
 	aoSelecionar?: (selecionado: boolean) => void;
+	selecionadoPadrao?: boolean;
+	deveMudar?: boolean;
 	children?: ReactNode;
 };
 
-export function Etiqueta({ aoSelecionar, children, ...rest }: Props) {
-	const [selecionado, defSelecionado] = useState(false);
+export function Etiqueta({
+	selecionadoPadrao = false,
+	deveMudar = true,
+	aoSelecionar,
+	children,
+	...rest
+}: Props) {
+	const [selecionado, defSelecionado] = useState(selecionadoPadrao);
 
 	useEffect(() => {
 		aoSelecionar && aoSelecionar(selecionado);
@@ -17,7 +25,7 @@ export function Etiqueta({ aoSelecionar, children, ...rest }: Props) {
 	return (
 		<Pressable
 			onPress={() => {
-				defSelecionado(!selecionado);
+				if (deveMudar) defSelecionado(!selecionado);
 			}}
 			style={[estilos.conteiner, selecionado && estilos.conteinerSelecionado]}
 			{...rest}

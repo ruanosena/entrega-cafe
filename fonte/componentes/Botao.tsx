@@ -7,13 +7,18 @@ type Props = TouchableOpacityProps & {
 	children?: ReactNode;
 };
 
-export function Botao({ tipo = "primario", children, ...rest }: Props) {
+export function Botao({ tipo, children, ...rest }: Props) {
 	return (
 		<TouchableOpacity
 			style={[
 				estilos.botao,
 				{
-					backgroundColor: tipo == "primario" ? TEMA.CORES.ROXO_ESCURO : TEMA.CORES.AMARELO_ESCURO,
+					backgroundColor:
+						tipo == "primario"
+							? TEMA.CORES.ROXO_ESCURO
+							: tipo == "secundario"
+							? TEMA.CORES.AMARELO_ESCURO
+							: "transparent",
 				},
 			]}
 			activeOpacity={0.75}

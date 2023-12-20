@@ -8,7 +8,11 @@ export function EntradaNumero({ ...rest }: TextInputProps) {
 
 	return (
 		<View style={estilos.conteiner}>
-			<BotaoIcone icone="minus" onPress={() => (valor == 0 ? null : defValor(valor - 1))} />
+			<BotaoIcone
+				icone="minus"
+				tipo="primario"
+				onPress={() => (valor == 0 ? null : defValor(valor - 1))}
+			/>
 			<TextInput
 				style={estilos.entrada}
 				keyboardType="number-pad"
@@ -16,7 +20,7 @@ export function EntradaNumero({ ...rest }: TextInputProps) {
 				onChangeText={(texto) => defValor(Number(texto))}
 				{...rest}
 			/>
-			<BotaoIcone icone="plus" onPress={() => defValor(valor + 1)} />
+			<BotaoIcone icone="plus" tipo="primario" onPress={() => defValor(valor + 1)} />
 		</View>
 	);
 }

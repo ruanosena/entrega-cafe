@@ -2,23 +2,28 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TEMA } from "../estilos/tema";
 
 import CafeImagem from "../assets/Irlandês.png";
+import { Cafe } from "../dados/cafes";
+import Formatador from "../utilitarios/MoedaFormatador";
 
 type Props = {
 	tamanho?: "pequeno" | "grande";
+	dados: Cafe;
 };
 
-export function CartaoDestaque({ tamanho = "pequeno" }: Props) {
+export function CartaoDestaque({ dados, tamanho = "pequeno" }: Props) {
 	return (
 		<View style={[estilos.conteiner, tamanho == "grande" && estilos.conteinerGrande]}>
 			<Image
-				source={CafeImagem}
+				source={dados.imagem}
 				style={[estilos.imagem, tamanho == "grande" && estilos.imagemGrande]}
 				resizeMode="contain"
 			/>
-			<Text style={[estilos.marca, tamanho == "grande" && estilos.marcaGrande]}>Especial</Text>
-			<Text style={[estilos.titulo, tamanho == "grande" && estilos.tituloGrande]}>Irlandês</Text>
+			<Text style={[estilos.marca, tamanho == "grande" && estilos.marcaGrande]}>{dados.marca}</Text>
+			<Text style={[estilos.titulo, tamanho == "grande" && estilos.tituloGrande]}>
+				{dados.titulo}
+			</Text>
 			<Text style={[estilos.descricao, tamanho == "grande" && estilos.descricaoGrande]}>
-				Bebida a base de café, uísque irlandês, açúcar e chantilly
+				{dados.descricao}
 			</Text>
 			<Text style={[estilos.preco, tamanho == "grande" && estilos.precoGrande]}>
 				<Text
@@ -26,7 +31,7 @@ export function CartaoDestaque({ tamanho = "pequeno" }: Props) {
 				>
 					R$
 				</Text>{" "}
-				9,90
+				{Formatador(dados.preco)}
 			</Text>
 		</View>
 	);

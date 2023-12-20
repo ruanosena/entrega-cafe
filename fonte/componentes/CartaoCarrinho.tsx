@@ -14,7 +14,7 @@ export function CartaoCarrinho() {
 				<Text style={estilos.detalhes}>227ml</Text>
 				<View style={estilos.botoes}>
 					<EntradaNumero />
-					<BotaoIcone icone="trash-can-outline" />
+					<BotaoIcone icone="trash-can-outline" tipo="primario" />
 				</View>
 			</View>
 			<Text style={estilos.preco}>R$ 9,90</Text>

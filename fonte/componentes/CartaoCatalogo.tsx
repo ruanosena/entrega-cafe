@@ -1,8 +1,7 @@
-import { Image, StyleSheet, Text, View, ViewProps } from "react-native";
-import { TEMA } from "../estilos/tema";
-
-import cafeImagem from "../assets/Expresso.png";
+import { Image, StyleSheet, Text, TouchableOpacity, View, ViewProps } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Cafe } from "../dados/cafes";
+import { TEMA } from "../estilos/tema";
 import Formatador from "../utilitarios/MoedaFormatador";
 
 type Props = ViewProps & {
@@ -10,8 +9,14 @@ type Props = ViewProps & {
 };
 
 export function CartaoCatalogo({ dados, ...rest }: Props) {
+	const navegacao = useNavigation();
+
+	function lidarAbrirProduto() {
+		navegacao.navigate("detalhes", { produtoId: dados.id });
+	}
+
 	return (
-		<View style={estilos.conteiner} {...rest}>
+		<TouchableOpacity style={estilos.conteiner} onPress={() => lidarAbrirProduto()} {...rest}>
 			<Image style={estilos.imagem} source={dados.imagem} alt="Foto do café na xícara" />
 			<View style={estilos.conteudo}>
 				<Text style={estilos.titulo}>{dados.titulo}</Text>
@@ -20,7 +25,7 @@ export function CartaoCatalogo({ dados, ...rest }: Props) {
 					<Text style={estilos.precoAbreviacao}>R$</Text> {Formatador(dados.preco)}
 				</Text>
 			</View>
-		</View>
+		</TouchableOpacity>
 	);
 }
 

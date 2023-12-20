@@ -1,21 +1,24 @@
-import { FlatList, ScrollView, SectionList, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BotaoIcone } from "../componentes/BotaoIcone";
-import { TEMA } from "../estilos/tema";
 import { CarrinhoBotao } from "../componentes/CarrinhoBotao";
 import { EntradaPesquisar } from "../componentes/EntradaPesquisar";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { CartaoDestaque } from "../componentes/CartaoDestaque";
 import { Etiqueta } from "../componentes/Etiqueta";
-import { CAFES } from "../dados/cafes";
 import { CartaoCatalogo } from "../componentes/CartaoCatalogo";
+import { PRODUTOS, Cafe } from "../dados/cafes";
+import { TEMA } from "../estilos/tema";
 
 export function Inicio() {
+	const [filtros, defFiltros] = useState<string[]>(PRODUTOS.map((dados) => dados.title));
+
 	return (
 		<SafeAreaView style={estilos.conteiner}>
 			<ScrollView>
 				<View style={estilos.cabecalho}>
 					<View style={estilos.local}>
-						<BotaoIcone icone="map-marker" />
+						<BotaoIcone icone="map-marker" tipo="primario" />
 						<Text style={estilos.localTexto}>Porto Alegre, RS</Text>
 					</View>
 					<CarrinhoBotao />
@@ -30,10 +33,14 @@ export function Inicio() {
 						contentContainerStyle={estilos.carrosselConteiner}
 						horizontal
 						showsHorizontalScrollIndicator={false}
-						data={[1, 2, 3, 4]}
-						keyExtractor={(item) => "café-" + item}
+						data={PRODUTOS.reduce((secoes, secao) => {
+							// escolhe um café aleatório de cada lista
+							secoes.push(secao.data[Math.trunc(Math.random() * secao.data.length)]);
+							return secoes;
+						}, [] as Cafe[])}
+						keyExtractor={(item) => "café-" + item.id}
 						renderItem={({ item, index }) => (
-							<CartaoDestaque tamanho={index > 0 ? "pequeno" : "grande"} />
+							<CartaoDestaque dados={item} tamanho={index > 0 ? "pequeno" : "grande"} />
 						)}
 					/>
 					<View style={estilos.lista}>
@@ -43,18 +50,30 @@ export function Inicio() {
 							showsHorizontalScrollIndicator={false}
 							contentContainerStyle={estilos.listaFiltros}
 						>
-							<Etiqueta>Tradicionais</Etiqueta>
-							<Etiqueta>Doces</Etiqueta>
-							<Etiqueta>Especiais</Etiqueta>
+							{PRODUTOS.map(({ title }, ind) => (
+								<Etiqueta
+									key={title + ind}
+									deveMudar={filtros.length > 1 || !filtros.includes(title)}
+									selecionadoPadrao={filtros.includes(title)}
+									aoSelecionar={(selecionado) => {
+										if (selecionado) defFiltros((filtros) => [...filtros, title]);
+										else defFiltros((filtros) => filtros.filter((f) => f != title));
+									}}
+								>
+									{title}
+								</Etiqueta>
+							))}
 						</ScrollView>
-						{CAFES.map((item) => (
-							<View style={estilos.secao} key={item.title.split(" ").join("")}>
-								<Text style={estilos.secaoTitulo}>{item.title}</Text>
-								{item.data.map((itemDados) => (
-									<CartaoCatalogo key={itemDados.id} dados={itemDados} />
-								))}
-							</View>
-						))}
+						{PRODUTOS.map((item) =>
+							filtros.includes(item.title) ? (
+								<View style={estilos.secao} key={item.title.split(" ").join("")}>
+									<Text style={estilos.secaoTitulo}>{item.title}</Text>
+									{item.data.map((itemDados) => (
+										<CartaoCatalogo key={itemDados.id} dados={itemDados} />
+									))}
+								</View>
+							) : null
+						)}
 					</View>
 				</View>
 			</ScrollView>
