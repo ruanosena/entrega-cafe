@@ -1,14 +1,26 @@
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TEMA } from "../estilos/tema";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = TouchableOpacityProps & {
 	itens?: number;
 };
 
 export function CarrinhoBotao({ itens = 0, ...rest }: Props) {
+	const navegacao = useNavigation();
+
+	function aoAbrirCarrinho() {
+		navegacao.navigate("carrinho");
+	}
+
 	return (
-		<TouchableOpacity style={estilos.botao} activeOpacity={0.75} {...rest}>
+		<TouchableOpacity
+			style={estilos.botao}
+			activeOpacity={0.75}
+			onPress={aoAbrirCarrinho}
+			{...rest}
+		>
 			<MaterialCommunityIcons
 				name={"cart"}
 				size={20}
