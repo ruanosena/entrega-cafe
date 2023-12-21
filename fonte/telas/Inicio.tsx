@@ -9,14 +9,49 @@ import { Etiqueta } from "../componentes/Etiqueta";
 import { CartaoCatalogo } from "../componentes/CartaoCatalogo";
 import { PRODUTOS, Cafe } from "../dados/cafes";
 import { TEMA } from "../estilos/tema";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated, {
+	Extrapolate,
+	FadeIn,
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue,
+} from "react-native-reanimated";
 
 export function Inicio() {
 	const [filtros, defFiltros] = useState<string[]>(PRODUTOS.map((dados) => dados.title));
+	const scrollY = useSharedValue(0);
+
+	const lidarRolagem = useAnimatedScrollHandler({
+		onScroll: (evento) => {
+			scrollY.value = evento.contentOffset.y;
+		},
+	});
+
+	const secaoTituloFixoEstilo = useAnimatedStyle(() => ({
+		position: "absolute",
+		width: "100%",
+		paddingTop: 16,
+		paddingHorizontal: 32,
+		paddingBottom: 12,
+		backgroundColor: TEMA.CORES.CINZA_100,
+		zIndex: 1,
+		opacity: interpolate(scrollY.value, [600, 740], [0, 1], Extrapolate.CLAMP),
+		transform: [
+			{ translateY: interpolate(scrollY.value, [600, 750], [-40, 0], Extrapolate.CLAMP) },
+		],
+	}));
+	const secaoTituloAnimadoEstilo = useAnimatedStyle(() => ({
+		opacity: interpolate(scrollY.value, [650, 730], [1, 0], Extrapolate.CLAMP),
+	}));
 
 	return (
 		<SafeAreaView style={estilos.conteiner}>
-			<ScrollView>
+			<Animated.View style={secaoTituloFixoEstilo}>
+				{scrollY.value <= 1270 && <Text style={estilos.secaoTitulo}>{PRODUTOS[0].title}</Text>}
+				{scrollY.value > 1270 && <Text style={estilos.secaoTitulo}>{PRODUTOS[1].title}</Text>}
+			</Animated.View>
+			<Animated.ScrollView onScroll={lidarRolagem} scrollEventThrottle={16}>
 				<View style={estilos.cabecalho}>
 					<View style={estilos.local}>
 						<BotaoIcone icone="map-marker" tipo="primario" />
@@ -67,10 +102,14 @@ export function Inicio() {
 								</Etiqueta>
 							))}
 						</ScrollView>
-						{PRODUTOS.map((item) =>
+						{PRODUTOS.map((item, index) =>
 							filtros.includes(item.title) ? (
 								<View style={estilos.secao} key={item.title.split(" ").join("")}>
-									<Text style={estilos.secaoTitulo}>{item.title}</Text>
+									<Animated.Text
+										style={[estilos.secaoTitulo, index == 0 && secaoTituloAnimadoEstilo]}
+									>
+										{item.title}
+									</Animated.Text>
 									{item.data.map((itemDados, index) => (
 										<CartaoCatalogo key={itemDados.id} index={index} dados={itemDados} />
 									))}
@@ -79,7 +118,7 @@ export function Inicio() {
 						)}
 					</View>
 				</View>
-			</ScrollView>
+			</Animated.ScrollView>
 		</SafeAreaView>
 	);
 }
