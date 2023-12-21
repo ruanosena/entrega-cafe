@@ -9,6 +9,7 @@ import { Etiqueta } from "../componentes/Etiqueta";
 import { CartaoCatalogo } from "../componentes/CartaoCatalogo";
 import { PRODUTOS, Cafe } from "../dados/cafes";
 import { TEMA } from "../estilos/tema";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 export function Inicio() {
 	const [filtros, defFiltros] = useState<string[]>(PRODUTOS.map((dados) => dados.title));
@@ -40,7 +41,9 @@ export function Inicio() {
 						}, [] as Cafe[])}
 						keyExtractor={(item) => "café-" + item.id}
 						renderItem={({ item, index }) => (
-							<CartaoDestaque dados={item} tamanho={index > 0 ? "pequeno" : "grande"} />
+							<Animated.View entering={FadeIn.delay((index + 1) * 500)}>
+								<CartaoDestaque dados={item} tamanho={index > 0 ? "pequeno" : "grande"} />
+							</Animated.View>
 						)}
 					/>
 					<View style={estilos.lista}>
@@ -68,8 +71,8 @@ export function Inicio() {
 							filtros.includes(item.title) ? (
 								<View style={estilos.secao} key={item.title.split(" ").join("")}>
 									<Text style={estilos.secaoTitulo}>{item.title}</Text>
-									{item.data.map((itemDados) => (
-										<CartaoCatalogo key={itemDados.id} dados={itemDados} />
+									{item.data.map((itemDados, index) => (
+										<CartaoCatalogo key={itemDados.id} index={index} dados={itemDados} />
 									))}
 								</View>
 							) : null

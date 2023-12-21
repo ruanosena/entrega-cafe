@@ -1,14 +1,29 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewProps } from "react-native";
+import {
+	Image,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	TouchableOpacityProps,
+	View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Cafe } from "../dados/cafes";
 import { TEMA } from "../estilos/tema";
 import Formatador from "../utilitarios/MoedaFormatador";
+import Animated, {
+	SlideInLeft,
+	SlideInRight,
+	SlideOutLeft,
+	SlideOutRight,
+} from "react-native-reanimated";
+const TouchableOpacityAnimado = Animated.createAnimatedComponent(TouchableOpacity);
 
-type Props = ViewProps & {
+type Props = TouchableOpacityProps & {
 	dados: Cafe;
+	index: number;
 };
 
-export function CartaoCatalogo({ dados, ...rest }: Props) {
+export function CartaoCatalogo({ dados, index, ...rest }: Props) {
 	const navegacao = useNavigation();
 
 	function lidarAbrirProduto() {
@@ -16,7 +31,17 @@ export function CartaoCatalogo({ dados, ...rest }: Props) {
 	}
 
 	return (
-		<TouchableOpacity style={estilos.conteiner} onPress={() => lidarAbrirProduto()} {...rest}>
+		<TouchableOpacityAnimado
+			entering={
+				index % 2 == 1
+					? SlideInRight.duration(850).delay(index * 300)
+					: SlideInLeft.duration(850).delay(index * 300)
+			}
+			exiting={index % 2 == 1 ? SlideOutRight.duration(850) : SlideOutLeft.duration(850)}
+			style={estilos.conteiner}
+			onPress={() => lidarAbrirProduto()}
+			{...rest}
+		>
 			<Image style={estilos.imagem} source={dados.imagem} alt="Foto do café na xícara" />
 			<View style={estilos.conteudo}>
 				<Text style={estilos.titulo}>{dados.titulo}</Text>
@@ -25,7 +50,7 @@ export function CartaoCatalogo({ dados, ...rest }: Props) {
 					<Text style={estilos.precoAbreviacao}>R$</Text> {Formatador(dados.preco)}
 				</Text>
 			</View>
-		</TouchableOpacity>
+		</TouchableOpacityAnimado>
 	);
 }
 
