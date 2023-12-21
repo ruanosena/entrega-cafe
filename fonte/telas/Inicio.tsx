@@ -17,16 +17,25 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from "react-native-reanimated";
+import { Torrada } from "../componentes/Torrada";
 
 export function Inicio() {
 	const [filtros, defFiltros] = useState<string[]>(PRODUTOS.map((dados) => dados.title));
 	const scrollY = useSharedValue(0);
+	const [mostrarTorrada, defMostrarTorrada] = useState<Cafe | undefined>();
 
 	const lidarRolagem = useAnimatedScrollHandler({
 		onScroll: (evento) => {
 			scrollY.value = evento.contentOffset.y;
 		},
 	});
+
+	function lidarAdicionarCafe(cafe: Cafe) {
+		defMostrarTorrada(cafe);
+		setTimeout(() => {
+			defMostrarTorrada(undefined);
+		}, 3000);
+	}
 
 	const secaoTituloFixoEstilo = useAnimatedStyle(() => ({
 		position: "absolute",
@@ -51,6 +60,7 @@ export function Inicio() {
 				{scrollY.value <= 1270 && <Text style={estilos.secaoTitulo}>{PRODUTOS[0].title}</Text>}
 				{scrollY.value > 1270 && <Text style={estilos.secaoTitulo}>{PRODUTOS[1].title}</Text>}
 			</Animated.View>
+			{mostrarTorrada && <Torrada>{mostrarTorrada.titulo} adicionado ao carrinho</Torrada>}
 			<Animated.ScrollView onScroll={lidarRolagem} scrollEventThrottle={16}>
 				<View style={estilos.cabecalho}>
 					<View style={estilos.local}>
@@ -77,7 +87,11 @@ export function Inicio() {
 						keyExtractor={(item) => "café-" + item.id}
 						renderItem={({ item, index }) => (
 							<Animated.View entering={FadeIn.delay((index + 1) * 500)}>
-								<CartaoDestaque dados={item} tamanho={index > 0 ? "pequeno" : "grande"} />
+								<CartaoDestaque
+									onPress={() => lidarAdicionarCafe(item)}
+									dados={item}
+									tamanho={index > 0 ? "pequeno" : "grande"}
+								/>
 							</Animated.View>
 						)}
 					/>

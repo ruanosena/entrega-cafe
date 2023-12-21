@@ -1,18 +1,21 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, PressableProps, StyleSheet, Text, View } from "react-native";
 import { TEMA } from "../estilos/tema";
 
 import CafeImagem from "../assets/Irlandês.png";
 import { Cafe } from "../dados/cafes";
 import Formatador from "../utilitarios/MoedaFormatador";
 
-type Props = {
+type Props = PressableProps & {
 	tamanho?: "pequeno" | "grande";
 	dados: Cafe;
 };
 
-export function CartaoDestaque({ dados, tamanho = "pequeno" }: Props) {
+export function CartaoDestaque({ dados, tamanho = "pequeno", ...rest }: Props) {
 	return (
-		<View style={[estilos.conteiner, tamanho == "grande" && estilos.conteinerGrande]}>
+		<Pressable
+			style={[estilos.conteiner, tamanho == "grande" && estilos.conteinerGrande]}
+			{...rest}
+		>
 			<Image
 				source={dados.imagem}
 				style={[estilos.imagem, tamanho == "grande" && estilos.imagemGrande]}
@@ -33,7 +36,7 @@ export function CartaoDestaque({ dados, tamanho = "pequeno" }: Props) {
 				</Text>{" "}
 				{Formatador(dados.preco)}
 			</Text>
-		</View>
+		</Pressable>
 	);
 }
 
