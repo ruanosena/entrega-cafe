@@ -11,6 +11,7 @@ import XicaraCafe from "../assets/XicaraCafe.png";
 import { Selecionar } from "../componentes/Selecionar";
 import { EntradaNumero } from "../componentes/EntradaNumero";
 import { Botao } from "../componentes/Botao";
+import { useCarrinho } from "../hooks/useCarrinho";
 
 const LISTA_CAFE = PRODUTOS.reduce((lista, dados) => {
 	lista.push(...dados.data);
@@ -25,6 +26,8 @@ export function Detalhes() {
 	const [produto, defProduto] = useState<Cafe>({} as Cafe);
 	const rota = useRoute();
 	const navegacao = useNavigation();
+	const [quantidade, defQuantidade] = useState(0);
+	const { addProdutoCarrinho } = useCarrinho();
 
 	const { produtoId } = rota.params as RotaParamsProps;
 
@@ -34,6 +37,10 @@ export function Detalhes() {
 		} else {
 			navegacao.navigate("inicio");
 		}
+	}
+
+	function lidarAddProduto() {
+		addProdutoCarrinho({ ...produto, quantidade });
 	}
 
 	useEffect(() => {
@@ -74,8 +81,10 @@ export function Detalhes() {
 					</View>
 
 					<View style={estilos.botoes}>
-						<EntradaNumero />
-						<Botao tipo="primario">Adicionar</Botao>
+						<EntradaNumero aoMudarValor={(valor) => defQuantidade(valor)} />
+						<Botao tipo="primario" onPress={lidarAddProduto}>
+							Adicionar
+						</Botao>
 					</View>
 				</View>
 			</ScrollView>

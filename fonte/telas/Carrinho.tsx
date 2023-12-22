@@ -5,9 +5,11 @@ import { BotaoIcone } from "../componentes/BotaoIcone";
 import { useNavigation } from "@react-navigation/native";
 import { CartaoCarrinho } from "../componentes/CartaoCarrinho";
 import { Botao } from "../componentes/Botao";
+import { useCarrinho } from "../hooks/useCarrinho";
 
 export function Carrinho() {
 	const navegacao = useNavigation();
+	const { carrinho } = useCarrinho();
 
 	function lidarVoltar() {
 		if (navegacao.canGoBack()) {
@@ -29,8 +31,9 @@ export function Carrinho() {
 					<Text style={estilos.cabecalhoTitulo}>Carrinho</Text>
 				</View>
 				<View style={estilos.conteudo}>
-					<CartaoCarrinho />
-					<CartaoCarrinho />
+					{carrinho.map((item) => (
+						<CartaoCarrinho dados={item} key={"carrinho-item-" + item.id} />
+					))}
 				</View>
 				<View style={estilos.rodape}>
 					<View style={estilos.valorTotal}>

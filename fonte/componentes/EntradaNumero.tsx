@@ -3,7 +3,11 @@ import { BotaoIcone } from "./BotaoIcone";
 import { useState } from "react";
 import { TEMA } from "../estilos/tema";
 
-export function EntradaNumero({ ...rest }: TextInputProps) {
+type EntradaNumeroProps = TextInputProps & {
+	aoMudarValor?: (valor: number) => void;
+};
+
+export function EntradaNumero({ aoMudarValor, ...rest }: EntradaNumeroProps) {
 	const [valor, defValor] = useState(0);
 
 	return (
@@ -11,16 +15,29 @@ export function EntradaNumero({ ...rest }: TextInputProps) {
 			<BotaoIcone
 				icone="minus"
 				tipo="primario"
-				onPress={() => (valor == 0 ? null : defValor(valor - 1))}
+				onPress={() => {
+					aoMudarValor && aoMudarValor(valor - 1);
+					valor == 0 ? null : defValor(valor - 1);
+				}}
 			/>
 			<TextInput
 				style={estilos.entrada}
 				keyboardType="number-pad"
 				value={valor.toString()}
-				onChangeText={(texto) => defValor(Number(texto))}
+				onChangeText={(texto) => {
+					aoMudarValor && aoMudarValor(Number(texto));
+					defValor(Number(texto));
+				}}
 				{...rest}
 			/>
-			<BotaoIcone icone="plus" tipo="primario" onPress={() => defValor(valor + 1)} />
+			<BotaoIcone
+				icone="plus"
+				tipo="primario"
+				onPress={() => {
+					aoMudarValor && aoMudarValor(valor + 1);
+					defValor(valor + 1);
+				}}
+			/>
 		</View>
 	);
 }

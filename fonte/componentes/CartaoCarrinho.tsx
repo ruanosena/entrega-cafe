@@ -4,20 +4,26 @@ import { TEMA } from "../estilos/tema";
 import cafeImagem from "../assets/Irlandês.png";
 import { EntradaNumero } from "./EntradaNumero";
 import { BotaoIcone } from "./BotaoIcone";
+import { CarrinhoProps } from "../contextos/CarrinhoContexto";
+import Formatador from "../utilitarios/MoedaFormatador";
 
-export function CartaoCarrinho() {
+type Props = {
+	dados: CarrinhoProps;
+};
+
+export function CartaoCarrinho({ dados }: Props) {
 	return (
 		<View style={estilos.conteiner}>
-			<Image style={estilos.imagem} source={cafeImagem} alt="Café irlandês" />
+			<Image style={estilos.imagem} source={dados.imagem} alt={dados.titulo} />
 			<View style={estilos.conteudo}>
-				<Text style={estilos.nome}>Irlandês</Text>
+				<Text style={estilos.nome}>{dados.titulo}</Text>
 				<Text style={estilos.detalhes}>227ml</Text>
 				<View style={estilos.botoes}>
 					<EntradaNumero />
 					<BotaoIcone icone="trash-can-outline" tipo="primario" />
 				</View>
 			</View>
-			<Text style={estilos.preco}>R$ 9,90</Text>
+			<Text style={estilos.preco}>R$ {Formatador(dados.preco)}</Text>
 		</View>
 	);
 }
